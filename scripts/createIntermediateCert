@@ -1,0 +1,29 @@
+#!/bin/bash
+
+CA_PATH=$1
+DAYS=$2
+SUBJECT="$3"
+
+# Create the csr for the new intermediate cert
+openssl req \
+  -config ${CA_PATH}/intermediate/openssl.cnf \
+  -new \
+  -sha256 \
+  -key ${CA_PATH}/intermediate/private/intermediate.key.pem \
+  -subj "$SUBJECT" \
+  -passin file:/tmp/pwd_file_intermediate \
+  -out ${CA_PATH}/intermediate/csr/intermediate.csr.pem
+
+# Now, the CA must create the intermediate certificate
+openssl ca \
+  -config ${CA_PATH}/openssl.cnf \
+  -extensions v3_intermediate_ca \
+  -days $DAYS \
+  -notext \
+  -batch \
+  -md sha256 \
+  -passin file:/tmp/pwd_file_root \
+  -in ${CA_PATH}/intermediate/csr/intermediate.csr.pem \
+  -out ${CA_PATH}/intermediate/certs/intermediate.cert.pem
+
+chmod 444 ${CA_PATH}/intermediate/certs/intermediate.cert.pem

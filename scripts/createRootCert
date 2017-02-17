@@ -1,0 +1,21 @@
+#!/bin/bash
+
+CA_PATH=$1
+DAYS=$2
+SUBJECT="$3"
+
+# Creates a new root cert
+openssl req \
+  -config ${CA_PATH}/openssl.cnf \
+  -key ${CA_PATH}/private/ca.key.pem \
+  -new \
+  -x509 \
+  -days $DAYS \
+  -sha256 \
+  -subj "$SUBJECT" \
+  -extensions v3_ca \
+  -passin file:/tmp/pwd_file_root \
+  -out ${CA_PATH}/certs/ca.cert.pem
+
+# Set the permissions appropriately
+chmod 444 ${CA_PATH}/certs/ca.cert.pem

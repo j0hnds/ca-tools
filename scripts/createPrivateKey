@@ -1,0 +1,19 @@
+#!/bin/bash
+
+PRIVATE_KEY_PATH=$1
+PASSPHRASE_TYPE=$2
+
+# Creates a new private key
+echo "openssl genrsa \
+  -aes256 \
+  -passout file:/tmp/pwd_file_$PASSPHRASE_TYPE \
+  -out $PRIVATE_KEY_PATH \
+  4096" > /tmp/createPrivateKey.log
+
+openssl genrsa \
+  -aes256 \
+  -passout file:/tmp/pwd_file_$PASSPHRASE_TYPE \
+  -out $PRIVATE_KEY_PATH \
+  4096
+
+chmod 400 $PRIVATE_KEY_PATH

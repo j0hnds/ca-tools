@@ -1,0 +1,8 @@
+# Vim
+*.swp
+
+# General nonsense
+*.pem
+
+# NPM
+node_modules

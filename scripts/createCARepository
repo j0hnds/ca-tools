@@ -1,0 +1,23 @@
+#!/bin/bash
+
+CA_BASE_DIRECTORY=$1
+CA_TEMPLATE_PATH=$2
+INT_TEMPLATE_PATH=$3
+
+# Creates the basic directory structure for the CA repository
+( mkdir -p $CA_BASE_DIRECTORY && \
+  cd $CA_BASE_DIRECTORY && \
+  mkdir certs crl newcerts private && \
+  chmod 700 private && \
+  touch index.txt && \
+  echo 1000 > serial && \
+  cp $CA_TEMPLATE_PATH ${CA_BASE_DIRECTORY}/openssl.cnf )
+
+( mkdir -p ${CA_BASE_DIRECTORY}/intermediate && \
+  cd ${CA_BASE_DIRECTORY}/intermediate && \
+  mkdir certs crl csr newcerts private &&
+  chmod 700 private && \
+  touch index.txt && \
+  echo 1000 > serial &&
+  echo 1000 > crlnumber &&
+  cp $INT_TEMPLATE_PATH ${CA_BASE_DIRECTORY}/intermediate/openssl.cnf )
